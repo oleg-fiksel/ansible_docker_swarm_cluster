@@ -1,0 +1,10 @@
+---
+
+- name: Check if node in the swarm
+  shell: "docker info | grep -i swarm | grep -v inactive"
+  register: joined
+  ignore_errors: True
+
+- name: Join worker in swarm
+  command: "{{ token }}"
+  when: joined.rc != 0

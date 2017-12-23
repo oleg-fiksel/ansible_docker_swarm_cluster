@@ -1,0 +1,14 @@
+version: '2.0'
+
+services:
+
+  unbound:
+    image: secns/unbound
+    ports:
+      - 53:53/udp
+    volumes:
+      - ./localzone.conf:/usr/local/etc/unbound/conf.d/localzone.conf:ro
+    environment:
+      DO_IPV6: "no"
+#      VERBOSITY: "5"
+    restart: always

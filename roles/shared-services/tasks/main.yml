@@ -1,0 +1,63 @@
+---
+- name: install nfs services
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - rpcbind
+    - nfs-kernel-server
+
+- name: start nfs services
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: yes
+  with_items:
+    - rpcbind
+    - nfs-kernel-server
+
+- name: create nfs exports dir
+  notify: reload nfs
+  file:
+    path: "{{ nfs_docker_export }}"
+    state: directory
+
+- name: set nfs exports
+  notify: reload nfs
+  lineinfile:
+    line: "{{ nfs_docker_export }}  {{nfs_subnet}}(rw,sync,no_subtree_check,all_squash,anonuid=0,anongid=0)"
+    path: /etc/exports
+
+- name: get default resolver
+  shell: "cat /etc/resolv.conf |grep nameserver|grep -v '#'|head -n1"
+  register: resolver
+
+- name: create directory for unbound
+  file:
+    path: /opt/unbound
+    state: directory
+
+- name: copy unbound docker-compose
+  copy:
+    src: unbound_docker-compose.yml
+    dest: /opt/unbound/docker-compose.yml
+
+- name: copy unbound config
+  template:
+    src: localzone.conf.j2
+    dest: /opt/unbound/localzone.conf
+
+- name: check of unbound is running
+  shell: "dig @localhost shared-services.docker.local"
+  register: unbound_running
+  ignore_errors: True
+
+- name: stop unbound docker container
+  command: "docker-compose down"
+  args:
+    chdir: /opt/unbound
+  when: unbound_running.rc == 0
+
+- name: start unbound docker container
+  command: "docker-compose up -d"
+  args:
+    chdir: /opt/unbound

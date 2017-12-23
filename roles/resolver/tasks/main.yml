@@ -1,0 +1,9 @@
+---
+
+- name: set default global resolver
+  lineinfile:
+    path: /etc/resolvconf/resolv.conf.d/head
+    line: "nameserver {{ global_resolver }}"
+
+- name: update resolver configuraton
+  command: resolvconf -u

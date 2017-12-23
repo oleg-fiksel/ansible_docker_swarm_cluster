@@ -1,0 +1,20 @@
+---
+- name: check if UCP is installed
+  shell: "docker ps | grep ucp"
+  ignore_errors: True
+  register: ucp_installed
+
+- name: Install UCP
+  command: "docker container run --rm \
+    --name ucp \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    docker/ucp \
+    install \
+    --admin-password {{ ucp_password }} \
+    --host-address {{ ansible_host }}
+    "
+  when: ucp_installed.rc != 0
+
+- name: Get swarm worker link
+  shell: docker swarm join-token worker|grep join
+  register: swarm_worker_token

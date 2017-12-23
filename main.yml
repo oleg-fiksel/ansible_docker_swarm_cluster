@@ -1,0 +1,33 @@
+---
+- hosts: all
+  # serial: 1 makes sure your laptop don't blow up
+  # change it if you are using servers as targets to save time
+  serial: 1
+  roles:
+    - nfs-client
+    - role: docker
+      uninstall_previous_docker_versions: true
+      # https://store.docker.com/editions/enterprise/docker-ee-trial
+      docker_edition: "ee"
+      keyring: "https://storebits.docker.com/ee/trial/sub-z4c1eda2-6b07-4f68-af5a-905bce1ee9ea/ubuntu/gpg"
+      apt_repository: "deb [arch=amd64] https://storebits.docker.com/ee/trial/sub-z4c1eda2-6b07-4f68-af5a-905bce1ee9ea/ubuntu/ xenial stable-17.06"
+      apt_key_sig: "DD911E995A64A202E85907D6BC14F10B6D085F96"
+
+- hosts: shared-services
+  roles:
+    - shared-services
+
+- hosts: all
+  roles:
+    - resolver
+
+- hosts: ucp
+  roles:
+    - role: ucp
+      ucp_password: ucppassword
+
+- hosts: worker
+  vars:
+    token: "{{ hostvars[groups['ucp'][0]]['swarm_worker_token']['stdout'] }}"
+  roles:
+    - worker
