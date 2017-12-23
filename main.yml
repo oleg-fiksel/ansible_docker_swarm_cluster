@@ -17,7 +17,7 @@
   roles:
     - shared-services
 
-- hosts: all
+- hosts: all:!shared-services
   roles:
     - resolver
 
