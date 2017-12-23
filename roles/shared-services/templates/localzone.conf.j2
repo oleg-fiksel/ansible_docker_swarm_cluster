@@ -3,18 +3,18 @@ server:
         val-permissive-mode: yes
         local-zone: "docker.local" transparent
 
-        local-data-ptr: "10.240.0.10 shared-services.docker.local"
-        local-data: "shared-services.docker.local A 10.240.0.10"
+        local-data-ptr: "192.168.99.10 shared-services.docker.local"
+        local-data: "shared-services.docker.local A 192.168.99.10"
 
-        local-data-ptr: "10.240.0.200 ucp01.docker.local"
-        local-data: "ucp01.docker.local A 10.240.0.200"
+        local-data-ptr: "192.168.99.200 ucp01.docker.local"
+        local-data: "ucp01.docker.local A 192.168.99.200"
 
-        local-data-ptr: "10.240.0.201 ucp02.docker.local"
-        local-data: "ucp02.docker.local A 10.240.0.201"
-        local-data: "dtr.docker.local A 10.240.0.201"
+        local-data-ptr: "192.168.99.201 ucp02.docker.local"
+        local-data: "ucp02.docker.local A 192.168.99.201"
+        local-data: "dtr.docker.local A 192.168.99.201"
 
-        local-data-ptr: "10.240.0.202 ucp03.docker.local"
-        local-data: "ucp03.docker.local A 10.240.0.203"
+        local-data-ptr: "192.168.99.202 ucp03.docker.local"
+        local-data: "ucp03.docker.local A 192.168.99.203"
 
         # add your entries here
 
