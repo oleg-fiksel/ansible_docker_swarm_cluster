@@ -1,6 +1,29 @@
-# Spin up a docker swarm cluster
+# Spin up a docker swarm cluster using ansible
 
 Used for fast deployment of a test swarm for testing different cluster failover scenarios mainly with Docker Enterprise.
+
+# Architecture
+
+* `shared-service`
+  * DNS resolver
+  * NFS server
+* `ucp`
+  * swarm node
+* `worker`
+  * swarm worker
+
+# Limitations
+
+* only one `shared-service` host
+* only one swarm manager (you can promote nodes to manager after running the playbook)
+
+# Usage
+
+* edit `inventory.ini`
+* edit `main.yml`
+  * set ucp admin password in variable `ucp_password`
+* run `ansible-playbook main.yml`
+* login to your ucp-IP with user `admin` and password specified in the step above
 
 # Known issues
 
