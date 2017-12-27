@@ -2,6 +2,13 @@
 
 Used for fast deployment of a test swarm for testing different cluster failover scenarios mainly with Docker Enterprise.
 
+# git submodules
+
+This git repo contains git submodules.
+
+Clone this repo using `git clone --recursive ...` command.
+If you already clone the repo use `git submodule update` command to clone submodules
+
 # Architecture
 
 * `shared-service`
